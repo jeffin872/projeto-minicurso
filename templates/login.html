@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="..//static//login.css">
+</head>
+<body>
+    <header>
+        <h1>Faça seu login</h1>
+    </header>
+    <main>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form action="/fazerlogin" method="post">
+                <label for="username">Login</label>
+                <input type="text" id="username" name="login">
+
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="senha">
+
+                <button type="submit">Enviar</button>
+            </form>
+            <p>Não possui login?  Faça o cadastro clicando neste link: </p>
+            <a href="/"> fazer cadastro</a>
+        </div>
+    </main>
+</body>
+</html>

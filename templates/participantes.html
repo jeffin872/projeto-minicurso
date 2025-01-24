@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Participantes</title>
+</head>
+<body>
+    <section>  
+    <h2>Adicionar Participante</h2>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <form action="{{ url_for('adicionar_participante') }}" method="post">
+            Nome: <input type="text" name="name" required><br>
+            Idade: <input type="number" name="age" required><br>
+            Telefone: <input type="text" name="phone" required><br>
+            Minicurso:
+            <select name="minicurso_id" required>
+                {% for minicurso in minicursos %}
+                <option value="{{ minicurso.id }}">{{ minicurso.title }}</option>
+                {% endfor %}
+            </select><br>
+            <div style="margin-top: 25px;" >
+                <button type="submit">Adicionar</button>
+                    <a href="/minicursos">Retornar aos minicursos</a>
+            </div>
+        </form>
+    </div>
+    {% if participantes %}
+    <h1>Lista de Participantes</h1>
+    <ul>
+        {% for participante in participantes %}
+        <li>
+            {{ participante.name }} ({{ participante.age }} anos) - Telefone: {{ participante.phone }} 
+            - Minicurso: {{ participante.minicurso.title }}
+            <form action="{{ url_for('remover_participante', id=participante.id) }}" method="post">
+                <button type="submit">Remover</button>
+            </form>
+        </li>
+        {% endfor %}
+        <a href="/minicursos">Retornar aos minicursos</a>
+
+        <h3 style="display: flex;justify-content: center;">Alterar Participante</h3>
+        <div style="display: flex; justify-content: center; align-items: center;" >
+            <form action="{{ url_for('alterar_participante') }}" method="post">
+                <label for="participant">Selecione o participante:</label>
+                <select name="participant_id" id="participant" required>
+                    {% for participante in participantes %}
+                    <option value="{{ participante.id }}">
+                    {{ participante.name }} ({{ participante.age }} anos)
+                    </option>
+                    {% endfor %}
+                </select><br><br>
+                Nome: <input type="text" name="name" required><br>
+                Idade: <input type="number" name="age" required><br>
+                Telefone: <input type="text" name="phone" required><br>
+                <label for="minicurso   ">Selecione o minicurso:</label>
+                <select name="minicurso_id" id="minicurso" required>
+                    {% for minicurso in minicursos %}
+                    <option value="{{ minicurso.id }}">{{ minicurso.title }}</option>
+                    {% endfor %}
+                </select><br><br>
+                <button type="submit">Alterar</button>
+                <a href="/minicursos">Retornar aos minicursos</a>
+            </form>
+        </div>
+    </ul>
+    {% else %}
+    <h1>Nenhum participante adicionado ainda</h1>
+    {% endif %}
+    </section>
+</body>
+</html>

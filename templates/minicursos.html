@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Minicursos</title>
+</head>
+<body>
+    <section style="background-color: #d3d3d3;" >]
+        <h1>Bem-vindo, {{ nome }}!</h1>
+        <h1>Adicionar Minicurso</h1>
+        <div style="display: flex; justify-content: center; align-items: center;"> 
+            <form style="padding: 50px;" action="{{ url_for('adicionar_minicurso') }}" method="post">
+                Título: <input type="text" name="title" required><br>
+                <button type="submit">Adicionar</button>
+                <a href="/participantes"> Página dos participantes</a>
+                <a href="/login"> Refazer login</a>
+            </form>
+        </div>
+        {% if minicursos %}
+        <h2>Lista de Minicursos</h2>
+        <ul >
+            {% for minicurso in minicursos %}
+            <li>
+                {{ minicurso.title }}
+                <form action="{{ url_for('remover_minicurso', id=minicurso.id) }}" method="post">
+                    <button type="submit">Remover</button>
+                </form>
+                
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h2>Nenhum minicurso foi adicionado ainda</h2>
+        {% endif %}
+    </section>
+
+</body>
+</html>

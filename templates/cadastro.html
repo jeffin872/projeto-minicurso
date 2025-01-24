@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="..//static//login.css">
+</head>
+<body>
+    <header>
+        <h1>Faça o seu cadastro</h1>
+    </header>
+    <main>
+        <div class="login-container">
+            <h2>Cadastro</h2>
+            <form action="/fazercadastro" method="post">
+                <label for="username">Login</label>
+                <input type="text" id="username" name="login">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="senha">
+                <button type="submit">Enviar</button>
+            </form>
+            <p>Se já tiver cadastrado, clique aqui para fazer o login</p>
+            <a href="/login">Fazer login</a>
+        </div>    
+
+    </main>
+</body>
+</html>
