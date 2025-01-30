@@ -68,31 +68,36 @@ def fazer_cadastro():
 # Página de minicursos
 @app.route('/minicursos', methods=['GET'])
 def listar_minicursos():
-    nome_usuario = session['login']
-    minicursos = Minicurso.query.all()
-    return render_template('minicursos.html', minicursos=minicursos, nome=nome_usuario)
+    if 'login' in session:
+        nome_usuario = session['login']
+        minicursos = Minicurso.query.all()
+        return render_template('minicursos.html', minicursos=minicursos, nome=nome_usuario)
+    else:
+        return render_template('login.html')
 
 #Rota para adicionar minicurso
 @app.route('/adicionar_minicurso', methods=['POST'])
 def adicionar_minicurso():
     #Verificações se o titulo está vázio ou já é existente no banco
-    titulo = request.form['title']
-    if titulo.strip() == "":
-        return render_template('erro.html', mensagem="Título do minicurso não pode estar vazio!")
+    if 'login' in session:
+        titulo = request.form['title']
+        if titulo.strip() == "":
+            return render_template('erro.html', mensagem="Título do minicurso não pode estar vazio!")
+        
+        minicursoexistente = Minicurso.query.filter_by(title=titulo).first()
+        if minicursoexistente:
+            return render_template('erro.html', mensagem="Título do minicurso já existe!")
+        
+        #Adicionando no banco de dados
+        minicurso = Minicurso(title=titulo)
+        db.session.add(minicurso)
+        db.session.commit()  
+        #Aqui ele redireciona para a função listar_minicursos, o 'url_for' faz a 'tradução' da 
+        # função listar_mincursos para a rota /minicurso na url do navegador. Em resumo ele recarrega a  página
+        return redirect(url_for('listar_minicursos'))
+    else: 
+        return  render_template('login.html')
     
-    minicursoexistente = Minicurso.query.filter_by(title=titulo).first()
-    if minicursoexistente:
-        return render_template('erro.html', mensagem="Título do minicurso já existe!")
-    
-    #Adicionando no banco de dados
-    minicurso = Minicurso(title=titulo)
-    db.session.add(minicurso)
-    db.session.commit()
-    
-    #Aqui ele redireciona para a função listar_minicursos, o 'url_for' faz a 'tradução' da 
-    # função listar_mincursos para a rota /minicurso na url do navegador. Em resumo ele recarrega a página
-    return redirect(url_for('listar_minicursos'))
-
 # Rota para remover minicurso
 @app.route('/remover_minicurso/<int:id>', methods=['POST'])
 def remover_minicurso(id):
@@ -165,5 +170,10 @@ def alterar_participante():
 
     return redirect(url_for('listar_participantes'))
 
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session.pop('login')
+    return render_template('login.html')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+        app.run(debug=True)
